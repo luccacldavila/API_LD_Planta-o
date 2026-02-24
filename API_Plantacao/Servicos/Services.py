@@ -1,7 +1,3 @@
-temperatura = 0.0
-umidade = 0.0
-pressão = 0.0
-
 def atualizar_sensores(temp, umid, press):
     global temperatura, umidade, pressão
     temperatura = temp
