@@ -5,7 +5,7 @@ app = Flask(__name__)
 sensores = []
 @app.route('/')
 def principal():
-    return render_template('index.html')
+    return render_template('paginahome.html')
 @app.route('/sensores', methods = ['GET'])
 def get_sensores():
     return {"sensores": sensores}
@@ -21,3 +21,6 @@ def selecionar_sensor(index):
         return {"sensor": sensores[index]}, 200
     else:
         return {"message": "Sensor não encontrado!"}, 404
+
+if __name__ == '__main__':
+    app.run(debug=True)
