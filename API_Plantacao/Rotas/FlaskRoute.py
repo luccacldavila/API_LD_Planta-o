@@ -1,6 +1,6 @@
 from flask import Flask, request
 from flask import render_template,request,redirect,url_for
-
+from Servicos import Services
 app = Flask(__name__)
 
 sensores = [] # Lista para armazenar os dados dos sensores
@@ -19,6 +19,7 @@ def get_sensores():
 
 def receber_sensores():
     data = request.get_json()
+    payload = Services.processar_dados(data)
     sensores.append(data)
     return {"message": "Sensor recebido com sucesso!"}, 200
 
