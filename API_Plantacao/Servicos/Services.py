@@ -8,7 +8,7 @@ dispostivo = {
   
 
 def iniciar_Dispositivo(dispositivo_conectado):
-    
+
     id = 1
     umidade = 0.0
     temperatura = 0.0
@@ -21,7 +21,7 @@ def iniciar_Dispositivo(dispositivo_conectado):
 
     return{"status": "Funcionando", "umidade": umidade, "temperatura": temperatura, "pressao": pressao}
     
-def validar_dados(dados):
+def validar_dados(dados): # Função para validar os dados recebidos dos sensores
 
     if dados["umidade"] is not None and dados["temperatura"] is not None and dados["pressao"] is not None:
 
@@ -30,23 +30,24 @@ def validar_dados(dados):
          return "Dados válidos!"
     else:
         return "Dados inválidos! Verifique os campos umidade, temperatura e pressão."
-def normalizar_dados(dados):
+def normalizar_dados(dados): # Função para normalizar os dados recebidos dos sensores
     dados.umidade = round(dados.umidade, 2)
     dados.temperatura = round(dados.temperatura, 2)
     dados.pressao = round(dados.pressao, 2)
     return dados  
     
 
-def processar_dados(dados):
-                if validar_dados(dados) == "Dados válidos!":
-                 dados.umidade = dados["umidade"]
-                 dados.temperatura = dados["temperatura"]
-                 dados.pressao = dados["pressao"]
-                 return "Dados processados com sucesso!"
-                else:
-                   return "Falha ao processar os dados. Verifique os campos umidade, temperatura e pressão."
-                
-iniciar_Dispositivo(dispostivo)
+def processar_dados(dados): # Função para processar os dados recebidos dos sensores
+                 if not dados:
+                  return {"message": "JSON inválido"}, 400
+
+                 if "umidade" not in dados or "temperatura" not in dados or "pressao" not in dados:
+                    return {"message": "Campos obrigatórios ausentes"}, 400
+                 
+                 else:
+                    return {"message": "Dados processados com sucesso!"}, 200
+                 
+iniciar_Dispositivo(dispostivo) #funções para teste
 validar_dados(dispostivo)
     
 print(dispostivo["id"])

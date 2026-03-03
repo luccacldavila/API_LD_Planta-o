@@ -20,10 +20,17 @@ def get_sensores():
 @api_bp.route('/recebersensores', methods = ['POST']) #Rota para receber os dados dos sensores
 
 def receber_sensores():
+    
     data = request.get_json()
-    payload = Services.processar_dados(data)
+
+    resultado, status = Services.processar_dados(data)
+
+    if status != 200:
+        return jsonify(resultado), status
+
     sensores.append(data)
-    return {"message": "Sensor recebido com sucesso!"}, 200
+
+    return jsonify(resultado), 200
 
 @api_bp.route('/selecionarsensor/<int:index>', methods = ['GET']) #Rota para selecionar um sensor específico com base no índice
 
@@ -33,13 +40,11 @@ def selecionar_sensor(index):
     else:
         return {"message": "Sensor não encontrado!"}, 404
     
-#@app.route('/registro', methods = ['GET', 'POST']) #Rota para registrar um novo usuario(incompleto)
+@api_bp.errorhandler(404) #Rota para lidar com erros 404
+def not_found(error):
+    return "Página não encontrada!", 404
 
-@api_bp.route('/recebersensores', methods=['POST'])
-def receber():
-    payload = request.get_json()
-    resultado = Services.processar_dados(payload)
-    return jsonify(resultado)
+#@app.route('/registro', methods = ['GET', 'POST']) #Rota para registrar um novo usuario(incompleto)
 
 
 
