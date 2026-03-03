@@ -1,21 +1,23 @@
-from flask import Flask, request
+from flask import Blueprint, Flask, request, jsonify
 from flask import render_template,request,redirect,url_for
 from Servicos import Services
-app = Flask(__name__)
+
+api_bp = Blueprint("api_bp",__name__)
 
 sensores = [] # Lista para armazenar os dados dos sensores
 
-@app.route('/') #Rota principal para renderizar a página inicial
+@api_bp.route('/') #Rota principal para renderizar a página inicial
 
 def principal():
     return render_template('paginahome.html')
 
-@app.route('/sensores', methods = ['GET']) #Rota para obter os dados dos sensores
+@api_bp.route('/sensores', methods = ['GET']) #Rota para obter os dados dos sensores
 
 def get_sensores():
-    return {"sensores": sensores}
+    
+    return jsonify({"sensores": sensores}), 200
 
-@app.route('/recebersensores', methods = ['POST']) #Rota para receber os dados dos sensores
+@api_bp.route('/recebersensores', methods = ['POST']) #Rota para receber os dados dos sensores
 
 def receber_sensores():
     data = request.get_json()
@@ -23,7 +25,7 @@ def receber_sensores():
     sensores.append(data)
     return {"message": "Sensor recebido com sucesso!"}, 200
 
-@app.route('/selecionarsensor/<int:index>', methods = ['GET']) #Rota para selecionar um sensor específico com base no índice
+@api_bp.route('/selecionarsensor/<int:index>', methods = ['GET']) #Rota para selecionar um sensor específico com base no índice
 
 def selecionar_sensor(index):
     if index >= 0 and index < len(sensores):
@@ -31,14 +33,13 @@ def selecionar_sensor(index):
     else:
         return {"message": "Sensor não encontrado!"}, 404
     
-@app.route('/registro', methods = ['GET', 'POST']) #Rota para registrar um novo usuario(incompleto)
+#@app.route('/registro', methods = ['GET', 'POST']) #Rota para registrar um novo usuario(incompleto)
 
-def registro():
-    if request.method == 'POST':
-        nome = request.form['nome']
-        senha = generate_password_hash(request.form['senha'])
+@api_bp.route('/recebersensores', methods=['POST'])
+def receber():
+    payload = request.get_json()
+    resultado = Services.processar_dados(payload)
+    return jsonify(resultado)
 
-        novousuario = Usuario(nome=nome, senha=senha)
 
-        return redirect(url_for('principal'))
 
