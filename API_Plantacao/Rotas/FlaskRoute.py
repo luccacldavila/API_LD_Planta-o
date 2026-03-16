@@ -1,10 +1,11 @@
 from flask import Blueprint, Flask, request, jsonify
 from flask import render_template,request,redirect,url_for
 from Servicos import Services
+from Repositorio import repositorio
 
 api_bp = Blueprint("api_bp",__name__)
 
-sensores = [] # Lista para armazenar os dados dos sensores
+sensores = repositorio.listardados() # Lista para armazenar os dados dos sensores
 
 @api_bp.route('/') #Rota principal para renderizar a página inicial
 
@@ -39,6 +40,10 @@ def selecionar_sensor(index):
         return {"sensor": sensores[index]}, 200
     else:
         return {"message": "Sensor não encontrado!"}, 404
+@api_bp.route('/sensores/alertas', methods = ['GET']) #Rota para obter alertas com base nos dados dos sensores
+def Diagnostco():
+    diagnostico = []
+    return 0 #A implementação da lógica para gerar alertas com base nos dados dos sensores será feita posteriormente
     
 @api_bp.errorhandler(404) #Rota para lidar com erros 404
 def not_found(error):

@@ -4,9 +4,6 @@ from Rotas.FlaskRoute import api_bp
 
 app = Flask(__name__)
 
-# Registrar blueprints de rotas
-#app.register_blueprint(api_bp)
-
 if __name__ == '__main__':
     app.register_blueprint(api_bp)  # Registrar o blueprint antes de iniciar o aplicativo
     app.run(debug=True)

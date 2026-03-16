@@ -1,4 +1,6 @@
 import time
+from Repositorio import repositorio
+
 dispostivo = {
     "id": 1,
     "umidade": 0.0,
@@ -37,15 +39,18 @@ def normalizar_dados(dados): # Função para normalizar os dados recebidos dos s
     return dados  
     
 
-def processar_dados(dados): # Função para processar os dados recebidos dos sensores
+def processar_dados(dados): # Função para processar os dados recebidos dos sensores(ainda em produção)
                  if not dados:
                   return {"message": "JSON inválido"}, 400
 
                  if "umidade" not in dados or "temperatura" not in dados or "pressao" not in dados:
-                    return {"message": "Campos obrigatórios ausentes"}, 400
+                    return {"message": "Campos obrigatorios ausentes"}, 400
                  
                  else:
+                    repositorio.salvardados(dispostivo)
                     return {"message": "Dados processados com sucesso!"}, 200
+
+
                  
 iniciar_Dispositivo(dispostivo) #funções para teste
 validar_dados(dispostivo)
